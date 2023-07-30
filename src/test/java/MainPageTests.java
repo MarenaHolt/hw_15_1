@@ -14,39 +14,33 @@ public class MainPageTests extends TestBase {
         mainPage.openMainPage().checkHeaderMainPage();
     }
 
-//    @Test
-//    @Tag("all")
-//    @DisplayName("При вводе текста в графу Промокод кнопка Активировать становится активна для нажатия")
-//    void checkPromoCodeButtonEnabled() {
-//        mainPage.openMainPage()
-//                .checkButtonPromoCode()
-//                .checkPromoInputEnabled("test");
-//    }
-//
-//    @Test
-//    @Tag("all")
-//    @DisplayName("Кнопка Активировать не активна для нажатия без ввода промокода")
-//    void checkPromoCodeButtonDisabled() {
-//        mainPage.openMainPage()
-//                .checkButtonPromoCode()
-//                .checkPromoInputDisabled();
-//    }
-//
-//    @Test
-//    @Tag("all")
-//    @DisplayName("Кнопка поиск активна, при ее нажатии отображается поле для поиска с плейсхолдером")
-//    void checkSearch() {
-//        mainPage.openMainPage()
-//                .checkSearchButton()
-//                .checkInputTypeSearchPlaceholder();
-//    }
-//
-//    @Test
-//    @Tag("all")
-//    @DisplayName("Проверка загрузки img с логотипом")
-//    void checkSearchOnSite() {
-//        mainPage.openMainPage()
-//                .checkImgLogo();
-//    }
+    @Test
+    @Tag("all")
+    @DisplayName("Проверка отображения поля поиска с плейсхолдером")
+    void checkSearchInput() {
+        mainPage.openMainPage().checkInputTypeSearchPlaceholder();
+    }
+
+    @Test
+    @Tag("all")
+    @DisplayName("Проверка отображения подсказок при вводе текста в строку поиска")
+    void checkResultList() {
+        mainPage.openMainPage().checkSearchResultListIsVisible("Три мушкетера");
+    }
+
+    @Test
+    @Tag("all")
+    @DisplayName("Проверка Перехода на страницу поиска после ввода данных в строку поиска")
+    void checkResultListWithPreviousSearchesAndModuleClear() {
+        mainPage.openMainPage().checkUrlOfPageWithSearchResult("fff");
+    }
+
+    @Test
+    @Tag("all")
+    @DisplayName("Проверка отображения cookieAcceptPopup")
+    void checkSearchOnSite() {
+        mainPage.openMainPage()
+                .checkСookieAcceptPopup();
+    }
 
 }

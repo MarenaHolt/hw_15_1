@@ -5,21 +5,18 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
-import org.openqa.selenium.By;
 
+import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.WebDriverConditions.url;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class MainPage {
     private SelenideElement
-            searchBar = $(".twotabsearchtextbox"),
-            inputTypeSearch = $("[type='search']"),
-            resultSearchHeader = $(".uyjr3HkY"),
-            promoCode = $("[test-id='nav_promo']"),
-            promoInput = $("[test-id='promo_input']"),
-            promoActivate = $("[test-id='promo_activate']"),
-            imageLogo = $(".Vjha6F_C");
+            inputTypeSearch = $("[data-test-id='header__search-input--desktop']"),
+            searchResultList = $("[data-test-id='header__search-result-list']"),
+            cookieAcceptPopup = $("[data-test-id='cookieAcceptPopup']");
 
     private static ElementsCollection resultElementsHeaders = $$(("[data-test-id='lower-menu--desktop']"));
 
@@ -33,42 +30,36 @@ public class MainPage {
     public MainPage checkHeaderMainPage() {
         resultElementsHeaders.shouldHave(
                 CollectionCondition.texts("Каталог\n" + "Подписка за 0 ₽\n" +
-                                "Новинки\n" + "Популярное\n" + "Аудиокниги\n" + "Что почитать?\n" + "Самиздат\n" + "Промокод\n" +"Ещё\n"));
+                        "Новинки\n" + "Популярное\n" + "Аудиокниги\n" + "Что почитать?\n" + "Самиздат\n" + "Промокод\n" + "Ещё\n"));
         return this;
     }
 
-    @Step
-    public MainPage checkButtonPromoCode() {
-        promoCode.shouldHave(Condition.visible).click();
+    @Step("Отображение подсказок в поиске")
+    public MainPage checkSearchResultListIsVisible(String text) {
+        inputTypeSearch.click();
+        inputTypeSearch.setValue(text);
+        searchResultList.shouldHave(Condition.visible);
         return this;
     }
 
-    public MainPage checkPromoInputEnabled(String promoCode) {
-        promoInput.shouldHave(Condition.visible).setValue(promoCode);
-        promoActivate.shouldHave(Condition.enabled);
-        return this;
-
-    }
-
-    public MainPage checkPromoInputDisabled() {
-        assertThat(promoInput.shouldHave(Condition.visible).getAttribute("placeholder")).isEqualTo("Промокод");
-        promoActivate.shouldHave(Condition.disabled);
-        return this;
-    }
-
-    public MainPage checkSearchButton() {
-        searchBar.click();
+    @Step("В поле подсказок в поиске отображаются кнопки Ранее вы искали и очистить историю")
+    public MainPage checkUrlOfPageWithSearchResult(String text) {
+        inputTypeSearch.click();
+        inputTypeSearch.setValue(text).submit();
+        webdriver().shouldHave(url("https://www.litres.ru/search/?q=" + text));
         return this;
     }
 
     public MainPage checkInputTypeSearchPlaceholder() {
-        assertThat(inputTypeSearch.shouldHave(Condition.visible).getAttribute("placeholder")).isEqualTo("Название фильма, сериала или имя актёра, режиссёра");
+        inputTypeSearch.shouldHave(Condition.visible);
+        assertThat(inputTypeSearch.shouldHave(Condition.visible).getAttribute("placeholder"))
+                .isEqualTo("Книга, серия, автор, жанр, издательство");
         return this;
     }
 
-    public MainPage checkImgLogo() {
-        assertTrue(imageLogo.isImage());
-        assertThat(imageLogo.getAttribute("src")).isEqualTo("https://static.okko.tv/notifications/tv/1682682482088/1682682502609_512x204.png");
+    public MainPage checkСookieAcceptPopup() {
+        assertThat(cookieAcceptPopup.shouldHave(Condition.visible).getText()).isEqualTo("Продолжая использовать этот сайт, вы даете согласие ООО \"ЛитРес\", город Москва, на обработку файлов cookie и соответствующих пользовательских данных... далее\n" +
+                "ПРИНЯТЬ");
         return this;
     }
 
