@@ -1,9 +1,9 @@
-package helpers;
+package config;
 
 import org.aeonbits.owner.Config;
 
 @TestsConfig.Sources({
-        "classpath:config/${env}.properties"
+        "classpath:${env}.properties"
 })
 public interface TestsConfig extends Config {
 

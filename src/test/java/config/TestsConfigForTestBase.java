@@ -1,6 +1,7 @@
-package helpers;
+package config;
 
 import com.codeborne.selenide.Configuration;
+import config.TestsConfig;
 import org.aeonbits.owner.ConfigFactory;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
